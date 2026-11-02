@@ -78,7 +78,10 @@ async function init() {
   } catch (e) { console.warn('clouds', e); }
   // MATTE: camera-projected reference background (src/matte.js): '&nomatte' off (render path as before),
   // '&mattew' outputs its weight as grey. Captures start with it off until setView / setMatte selects a projector.
-  if (!qs.has('nomatte')) try {
+  // It needs the reference backgrounds in data/matte (baked from ref/, neither is in the public repo): skipped without.
+  const hasMatte = !qs.has('nomatte') && await fetch('data/matte/force.json')
+    .then(r => r.ok && /json/.test(r.headers.get('content-type') || '')).catch(() => false);
+  if (hasMatte) try {
     const { Matte } = await import('./matte.js');
     modules.matte = post.matte = await Matte.create(renderer, post, camera, { showW: qs.has('mattew') });
     modules.matte.set(CAPTURE ? 0 : +(qs.get('view') || 7));
@@ -220,8 +223,8 @@ if (!CAPTURE) {
   let last = performance.now(), frames = 0, acc = 0, film = qs.has('film') ? 0 : null;
   window.addEventListener('keydown', e => {
     const map = { '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '0': 10, '-': 11 };
-    if (map[e.key]) modules.setView(map[e.key]);
-    if (e.key === 'v') { film = film === null ? performance.now() / 1000 : null; }
+    if (map[e.key]) { film = null; modules.setView(map[e.key]); }
+    if (e.key === 'v' || e.key === 'V') { film = film === null ? performance.now() / 1000 : null; }
     if (e.key === 'p') console.log(JSON.stringify({ pos: camera.position.toArray().map(v => +v.toFixed(2)), tgt: controls.target.toArray().map(v => +v.toFixed(2)), fov: camera.fov }));
   });
   const loop = () => {

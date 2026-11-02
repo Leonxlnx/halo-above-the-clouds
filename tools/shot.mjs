@@ -18,7 +18,7 @@ export async function launch(w = W, h = H, extra = '') {
     executablePath: process.env.CHROME || 'C:/Program Files/Google/Chrome/Application/chrome.exe',
     headless: 'new',
     protocolTimeout: 600000,
-    args: ['--use-angle=d3d11', '--ignore-gpu-blocklist', '--enable-gpu-rasterization', '--disable-gpu-watchdog',
+    args: [...(process.platform === 'win32' ? ['--use-angle=d3d11'] : []), '--ignore-gpu-blocklist', '--enable-gpu-rasterization', '--disable-gpu-watchdog',
       '--disable-renderer-backgrounding', '--disable-background-timer-throttling', `--window-size=${w},${h}`],
   });
   const close = browser.close.bind(browser);
@@ -81,7 +81,8 @@ if (process.argv[1].endsWith('shot.mjs')) {
     await gpuRest(Date.now() - t0);
     const file = `out/shots/${tag}_v${v}.png`;
     fs.writeFileSync(file, Buffer.from(url.split(',')[1], 'base64'));
-    const r = await compare(`ref/${v}.webp`, file, `out/shots/cmp_${tag}_v${v}.png`);
+    const ref = `ref/${v}.webp`;   // the reference images are not in the public repo: no comparison without them
+    const r = fs.existsSync(ref) ? await compare(ref, file, `out/shots/cmp_${tag}_v${v}.png`) : { dE: NaN, dL: NaN };
     results[v] = r;
     console.log(`view ${v}: ${Date.now() - t0} ms  dE=${r.dE} dL=${r.dL}`);
   }

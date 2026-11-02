@@ -5,7 +5,7 @@
 // it: up = +Y, lookAt tgt), angular/linear acceleration and pitch. Exit code 1 when a limit is violated.
 //
 // usage: node tools/filmcheck.mjs [--fps 30] [--json out/filmcheck.json] [--plot out/shots/film_paths.png] [--map] [--wisp 200]
-//   (PowerShell: cd E:\opusdemocircle_film; $env:PORT=5186; node tools/filmcheck.mjs)  ~15 s, no clouds needed
+//   (with the dev server running: node tools/filmcheck.mjs, env PORT if not 5173)  ~15 s, no clouds needed
 //   --wisp  clouds.js uWisp (m): the cloud ceiling is CLOUDS.top + wisp + 60
 //   node tools/filmcheck.mjs --flashes out/prevall   scans rendered frames for single-frame flashes instead (no server)
 //   --plot  top view (ring frame) of the terrain with every shot's camera path and aim

@@ -8,6 +8,9 @@
     "type": "git",
     "url": "https://github.com/Leonxlnx/halo-above-the-clouds.git"
   },
+  "engines": {
+    "node": ">=22.12"
+  },
   "scripts": {
     "dev": "vite",
     "data": "node tools/fetch-data.mjs",

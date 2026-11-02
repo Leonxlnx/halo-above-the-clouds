@@ -1,6 +1,6 @@
 // Download the baked scene data (terrain levels, lights, cloud noise volumes, sky dome, textures; ~0.3 GB) from the
-// GitHub release and unpack it into data/.  usage: npm run data   (needs Node 18+ and tar, which ships with
-// Windows 10+, macOS and Linux)
+// GitHub release and unpack it into data/.  usage: npm run data   (needs tar, which ships with Windows 10+, macOS
+// and Linux)
 import fs from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { Readable } from 'node:stream';
